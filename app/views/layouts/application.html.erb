@@ -7,24 +7,60 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
-
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="bg-gray-50 min-h-full">
+    <%= turbo_stream_from "online_users", channel: OnlineChannel %>
+    <header class="text-gray-600 body-font">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col sm:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 sm:mb-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          <span class="ml-3 text-xl">My App</span>
+        </a>
+        <nav class="sm:ml-auto sm:mr-auto flex flex-wrap items-center text-base justify-center">
+          <%= link_to "All members", root_path, class: "mr-5 hover:text-gray-900" %>
+        </nav>
+        <% if user_signed_in? %>
+          <span class="mr-3 text-sm">Signed in as <%= current_user.username %></span>
+          <%= button_to session_path(current_user.id), method: :delete, data: { turbo: false }, class: "inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 sm:mt-0" do %>
+            Logout
+          <% end %>
+        <% else %>
+          <%= link_to new_session_path, class: "inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 sm:mt-0" do %>Sign in
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          <% end %>
+        <% end %>
+      </div>
+    </header>
+    <div class="container mx-auto p-5">
+      <% if flash[:notice] %>
+        <div class="rounded-md bg-yellow-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <!-- Heroicon name: mini/exclamation-triangle -->
+              <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-yellow-800"><%= flash[:notice] %></h3>
+            </div>
+          </div>
+        </div>
+      <% end %>
       <%= yield %>
-    </main>
+    </div>
   </body>
 </html>
