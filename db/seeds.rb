@@ -7,3 +7,18 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+%w[
+  paul
+  amy
+  sarah
+  shan
+  emily
+  bert
+  alice
+  nate
+  gloria
+  gustav
+].each do |username|
+  User.where(username: username).first_or_create!
+end
