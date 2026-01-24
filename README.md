@@ -22,10 +22,10 @@ rails new action-cable-status --css=tailwind
 
 ## Technology Stack
 
-- **Rails 8.0.2**
+- **Rails 8.1.2**
 - **Ruby 3.4.4**
 - **SQLite3** (for database and Action Cable message storage)
-- **Tailwind CSS 4.1** for styling
+- **Tailwind CSS 4.4** for styling
 - **Turbo Rails** & **Stimulus** for reactive UI
 - **Action Cable** with **Solid Cable** for WebSocket connections
 
