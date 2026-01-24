@@ -8,6 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+puts "Creating users..."
+
 %w[
   paul
   amy
@@ -20,5 +22,8 @@
   gloria
   gustav
 ].each do |username|
-  User.where(username: username).first_or_create!
+  user = User.where(username: username).first_or_create!
+  puts "  ✓ Created user: #{user.username}"
 end
+
+puts "Seeding complete!"
