@@ -8,11 +8,18 @@ class ApplicationController < ActionController::Base
   helper_method :user_signed_in?
 
   def current_user
+    return @user if defined?(@user)
+
     if cookies.encrypted[:user_id]
-      @user ||= User.find(cookies.encrypted[:user_id])
+      @user = User.find_by(id: cookies.encrypted[:user_id])
+      unless @user
+        cookies.delete(:user_id)
+      end
+    else
+      @user = nil
     end
-  rescue => e
-    cookies.delete(:user_id)
+
+    @user
   end
   helper_method :current_user
 end

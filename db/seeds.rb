@@ -8,6 +8,16 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# Force all browsers to clear session cookies by rotating the secret
+# Uncomment the lines below to invalidate all existing cookies across browsers
+puts "⚠️  Rotating secret key to invalidate all existing cookies..."
+Rails.application.credentials.secret_key_base = SecureRandom.hex(64)
+puts "✓ Secret key rotated - all cookies will be invalid on next page load"
+
+puts "Clearing existing users..."
+User.delete_all
+puts "✓ All users deleted"
+
 puts "Creating users..."
 
 %w[
